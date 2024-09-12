@@ -12,6 +12,12 @@ export interface LoginState {
   phone?: string;
 }
 
+/**
+ *  T can be Profile
+ *  T can be Customer
+ *  T Can be Invoice
+ *  .....
+ */
 export interface CustomHttpResponse<T> {
   timeStamp: Date;
   statusCode: number;

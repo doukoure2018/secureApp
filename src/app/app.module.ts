@@ -11,6 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { VerifyComponent } from './component/verify/verify.component';
 import { ResetpasswordComponent } from './component/resetpassword/resetpassword.component';
 import {
+  HTTP_INTERCEPTORS,
   provideHttpClient,
   withFetch,
   withInterceptorsFromDi,
@@ -22,6 +23,7 @@ import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { StatsComponent } from './component/stats/stats.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,7 @@ import { StatsComponent } from './component/stats/stats.component';
   providers: [
     provideClientHydration(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
   ],
   bootstrap: [AppComponent],
 })
