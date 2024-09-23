@@ -1,10 +1,10 @@
-import { EventType } from '@angular/router';
+import { EventType } from '../enum/event-type.enum';
 
 export interface Events {
   id: Number;
-  type: EventType;
+  eventType: EventType;
   description: string;
   device: string;
   ipAddress: string;
-  createAt: Date;
+  createdAt: Date;
 }

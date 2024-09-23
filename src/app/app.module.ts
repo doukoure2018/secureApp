@@ -24,9 +24,16 @@ import { ProfileComponent } from './component/profile/profile.component';
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { StatsComponent } from './component/stats/stats.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { InvoiceComponent } from './component/invoice/invoice.component';
+import { NewcustomerComponent } from './component/newcustomer/newcustomer.component';
+import { InvoicesComponent } from './component/invoices/invoices.component';
+import { NewinvoiceComponent } from './component/newinvoice/newinvoice.component';
+import { ExtractArrayValue } from './pipes/extractvalue.pipe';
+import { CacheInterceptor } from './interceptors/cache.interceptor';
 
 @NgModule({
   declarations: [
+    ExtractArrayValue,
     AppComponent,
     LoginComponent,
     RegisterComponent,
@@ -38,12 +45,19 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     ProfileComponent,
     NavbarComponent,
     StatsComponent,
+    InvoiceComponent,
+    NewcustomerComponent,
+    InvoicesComponent,
+    NewinvoiceComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [
     provideClientHydration(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+    [
+      { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+      { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
+    ],
   ],
   bootstrap: [AppComponent],
 })

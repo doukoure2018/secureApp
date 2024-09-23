@@ -1,8 +1,11 @@
 import { DataState } from '../enum/datastate.enum';
+import { Customer } from './customer';
 import { Events } from './event';
+import { Invoice } from './invoice';
 import { Role } from './role';
 import { User } from './user';
 
+// when it comes to one table
 export interface LoginState {
   dataState: DataState;
   loginSuccess?: boolean;
@@ -34,4 +37,42 @@ export interface Profile {
   events?: Events[];
   access_token?: string;
   refresh_token?: string;
+}
+
+// Pagination
+export interface Page<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  numberOfElements: number;
+  size: number;
+  number: number;
+}
+
+export interface CustomerState {
+  user?: User;
+  customer?: Customer;
+}
+
+export interface InvoiceState {
+  user?: User;
+  customer?: Customer;
+  invoice?: Invoice;
+}
+
+export interface RegisterState {
+  dataState?: DataState;
+  registerSuccess?: boolean;
+  message?: string;
+  error?: string;
+}
+
+export type accountType = 'account' | 'password';
+export interface verifyState {
+  dataState: DataState; // to get the user information when it comes to reset the password
+  verifySuccess?: boolean;
+  message?: string;
+  error?: string;
+  title?: string;
+  type?: accountType;
 }

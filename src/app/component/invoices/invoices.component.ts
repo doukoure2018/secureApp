@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { State } from '../../interfaces/state';
+import { NgForm } from '@angular/forms';
 import {
-  BehaviorSubject,
-  catchError,
-  map,
   Observable,
-  of,
+  BehaviorSubject,
+  map,
   startWith,
+  catchError,
+  of,
 } from 'rxjs';
 import { DataState } from '../../enum/datastate.enum';
 import { CustomHttpResponse } from '../../interfaces/appstates';
 import { CustomerService } from '../../services/customer.service';
 import { UserService } from '../../services/user.service';
-import { State } from '../../interfaces/state';
-import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrl: './customers.component.scss',
+  selector: 'app-invoices',
+  templateUrl: './invoices.component.html',
+  styleUrl: './invoices.component.scss',
 })
-export class CustomersComponent implements OnInit {
-  customersState$: Observable<State<CustomHttpResponse<any>>> =
-    new Observable();
+export class InvoicesComponent implements OnInit {
+  invoicesState$: Observable<State<CustomHttpResponse<any>>> = new Observable();
   private dataSubject = new BehaviorSubject<CustomHttpResponse<any> | null>(
     null
   );
@@ -40,7 +39,7 @@ export class CustomersComponent implements OnInit {
   ngOnInit(): void {
     // the spinner start when it is true
     this.isLoadingSubject.next(true);
-    this.customersState$ = this.customerService.customers$().pipe(
+    this.invoicesState$ = this.customerService.invoices$().pipe(
       map((response) => {
         console.log(response);
         this.isLoadingSubject.next(false);
@@ -61,10 +60,10 @@ export class CustomersComponent implements OnInit {
     );
   }
 
-  searchCustomers(searchForm: NgForm): void {
+  searchInvoices(searchForm: NgForm): void {
     this.currentPageSubject.next(0);
     this.isLoadingSubject.next(true);
-    this.customersState$ = this.customerService
+    this.invoicesState$ = this.customerService
       .searchCustomers$(searchForm.value.name)
       .pipe(
         map((response) => {
@@ -91,7 +90,7 @@ export class CustomersComponent implements OnInit {
   }
 
   goToPage(pageNumber?: number, name?: string): void {
-    this.customersState$ = this.customerService
+    this.invoicesState$ = this.customerService
       .searchCustomers$(name, pageNumber)
       .pipe(
         map((response) => {

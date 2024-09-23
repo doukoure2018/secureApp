@@ -7,6 +7,12 @@ import { VerifyComponent } from './component/verify/verify.component';
 import { CustomersComponent } from './component/customers/customers.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
+import { AuthenticationGuard } from './guard/authentication.guard';
+import { NewcustomerComponent } from './component/newcustomer/newcustomer.component';
+import { NewinvoiceComponent } from './component/newinvoice/newinvoice.component';
+import { InvoicesComponent } from './component/invoices/invoices.component';
+import { CustomerComponent } from './component/customer/customer.component';
+import { InvoiceComponent } from './component/invoice/invoice.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -14,10 +20,44 @@ const routes: Routes = [
   { path: 'resetpassword', component: ResetpasswordComponent },
   { path: 'auth/secureapi/verify/account/:key', component: VerifyComponent },
   { path: 'auth/secureapi/verify/password/:key', component: VerifyComponent },
+  // from here use needs to get authenticated
 
-  { path: 'customers', component: CustomersComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: '', component: HomeComponent },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'customers',
+    component: CustomersComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'customers/new',
+    component: NewcustomerComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'invoices/new',
+    component: NewinvoiceComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'invoices',
+    component: InvoicesComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'customers/:id',
+    component: CustomerComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'invoices/:id/:invoiceNumber',
+    component: InvoiceComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  { path: '', component: HomeComponent, canActivate: [AuthenticationGuard] },
   { path: '', redirectTo: '/', pathMatch: 'full' },
   { path: '**', component: HomeComponent },
 ];

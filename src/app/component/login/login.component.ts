@@ -6,8 +6,6 @@ import {
   Observable,
   of,
   startWith,
-  Subscriber,
-  Subscription,
 } from 'rxjs';
 import { DataState } from '../../enum/datastate.enum';
 import { LoginState } from '../../interfaces/appstates';
@@ -32,11 +30,14 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
-    if (this.loginState$) {
-      this.loginState$.subscribe((loginState) => {
-        console.log('log State: ', loginState);
-      });
-    }
+    // if (this.loginState$) {
+    //   this.loginState$.subscribe((loginState) => {
+    //     console.log('log State: ', loginState);
+    //   });
+    // }
+    this.userService.isAuthenticated()
+      ? this.router.navigate(['/'])
+      : this.router.navigate(['/login']);
   }
 
   /**

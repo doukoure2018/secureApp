@@ -1,0 +1,225 @@
+<ng-container
+  *ngIf="newInvoiceState$ | async as state"
+  [ngSwitch]="state.dataState"
+>
+  <ng-container *ngSwitchCase="DataState.LOADED">
+    <app-navbar [user]="state?.appData?.data?.user"></app-navbar>
+    <section>
+      <div class="container">
+        <nav aria-label="breadcrumb" style="margin-top: 8px">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/']">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/customers']">Customers</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">New</li>
+          </ol>
+        </nav>
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="text-center">
+                  <h2>
+                    <i
+                      style="margin-right: 5px"
+                      class="bi bi-person-plus-fill"
+                    ></i>
+                    New Invoice
+                  </h2>
+                </div>
+                <div
+                  *ngIf="state.error"
+                  class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show"
+                  role="alert"
+                >
+                  {{ state.error }}
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div
+                  *ngIf="state.appData?.message"
+                  class="alert alert-success bg-success text-light border-0 alert-dismissible fade show"
+                  role="alert"
+                >
+                  {{ state.appData?.message }}
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+
+                <form
+                  #invoiceForm="ngForm"
+                  (ngSubmit)="createInvoice(invoiceForm)"
+                >
+                  <div class="row">
+                    <div class="col-md-6" style="margin-bottom: 15px">
+                      <div class="form-group">
+                        <label>Seelect a name</label>
+                        <select
+                          ngModel
+                          [disabled]="
+                            !(
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_SYSADMIN' ||
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_ADMIN'
+                            ) || ((isLoading$ | async) ?? false)
+                          "
+                          name="customer_id"
+                          class="form-control select-cl"
+                          required
+                        >
+                          <option
+                            *ngFor="
+                              let customer of state.appData?.data?.customers
+                            "
+                            class="select-cl"
+                            [selected]="
+                              state.appData?.data?.customers?.name ===
+                              customer.name
+                            "
+                            [disabled]="
+                              !(
+                                state.appData?.data?.user?.roleName ===
+                                  'ROLE_SYSADMIN' ||
+                                state.appData?.data?.user?.roleName ===
+                                  'ROLE_ADMIN'
+                              ) || ((isLoading$ | async) ?? false)
+                            "
+                            [ngValue]="customer.id"
+                          >
+                            {{ customer.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 15px">
+                      <div class="form-group">
+                        <label>Service</label>
+                        <input
+                          [disabled]="
+                            !(
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_SYSADMIN' ||
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_ADMIN'
+                            ) || ((isLoading$ | async) ?? false)
+                          "
+                          type="text"
+                          ngModel
+                          name="services"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 15px">
+                      <div class="form-group">
+                        <label for="date">Date</label>
+                        <input
+                          [disabled]="
+                            !(
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_SYSADMIN' ||
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_ADMIN'
+                            ) || ((isLoading$ | async) ?? false)
+                          "
+                          type="date"
+                          ngModel
+                          name="date"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6" style="margin-bottom: 15px">
+                      <label>Status</label>
+                      <select
+                        [disabled]="
+                          !(
+                            state.appData?.data?.user?.roleName ===
+                              'ROLE_SYSADMIN' ||
+                            state.appData?.data?.user?.roleName === 'ROLE_ADMIN'
+                          ) || ((isLoading$ | async) ?? false)
+                        "
+                        name="status"
+                        ngModel="ACTIVE"
+                        class="form-control"
+                        required
+                      >
+                        <option [selected]="true" value="ACTIVE">ACTIVE</option>
+                        <option value="BANNED">BANNED</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Total </label>
+                        <input
+                          [disabled]="
+                            !(
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_SYSADMIN' ||
+                              state.appData?.data?.user?.roleName ===
+                                'ROLE_ADMIN'
+                            ) || ((isLoading$ | async) ?? false)
+                          "
+                          type="number"
+                          ngModel
+                          name="total"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      [disabled]="
+                        !(
+                          state.appData?.data?.user?.roleName ===
+                            'ROLE_SYSADMIN' ||
+                          state.appData?.data?.user?.roleName === 'ROLE_ADMIN'
+                        ) ||
+                        ((isLoading$ | async) ?? false) ||
+                        state.dataState === DataState.LOADING ||
+                        invoiceForm.invalid ||
+                        invoiceForm.pristine ||
+                        (isLoading$ | async)
+                      "
+                      type="submit"
+                      class="btn btn-primary mt-5"
+                    >
+                      <span
+                        *ngIf="isLoading$ | async"
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                        style="margin-right: 5px"
+                      ></span>
+                      <span *ngIf="isLoading$ | async">Saving...</span>
+                      <span *ngIf="!(isLoading$ | async)">Save Invoice</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+</ng-container>
