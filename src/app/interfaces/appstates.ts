@@ -69,7 +69,7 @@ export interface RegisterState {
 
 export type accountType = 'account' | 'password';
 export interface verifyState {
-  dataState: DataState; // to get the user information when it comes to reset the password
+  dataState: DataState;
   verifySuccess?: boolean;
   message?: string;
   error?: string;

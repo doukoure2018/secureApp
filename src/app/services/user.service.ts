@@ -250,12 +250,21 @@ export class UserService {
     console.log(error);
     let errorMessage: string;
     if (error.error instanceof ErrorEvent) {
-      console.log(error.error.message);
+      console.log(error.error);
       errorMessage = `A client error occured - ${error.error.message}`;
     } else {
       if (error.error.message) {
         errorMessage = error.error.message;
         console.log(error.error.reason);
+      } else if (error.error) {
+        const errorKeys = Object.keys(error.error);
+        if (errorKeys.length > 0) {
+          const key = errorKeys[0];
+          errorMessage = error.error[key];
+          console.log(`${key}: ${error.error[key]}`);
+        } else {
+          errorMessage = `An error occurred - Error status ${error.status}`;
+        }
       } else {
         errorMessage = `An error Occurred - Error status ${error.status}`;
       }

@@ -38,6 +38,11 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard],
   },
   {
+    path: 'customers/:id',
+    component: CustomerComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
     path: 'invoices/new',
     component: NewinvoiceComponent,
     canActivate: [AuthenticationGuard],
@@ -45,11 +50,6 @@ const routes: Routes = [
   {
     path: 'invoices',
     component: InvoicesComponent,
-    canActivate: [AuthenticationGuard],
-  },
-  {
-    path: 'customers/:id',
-    component: CustomerComponent,
     canActivate: [AuthenticationGuard],
   },
   {

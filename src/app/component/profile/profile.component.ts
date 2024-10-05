@@ -25,8 +25,11 @@ export class ProfileComponent implements OnInit {
   private dataSubject = new BehaviorSubject<CustomHttpResponse<Profile> | null>(
     null
   );
-  private isLoadingSubject = new BehaviorSubject<boolean>(false); // this will be using inside of this class
-  isLoading$ = this.isLoadingSubject.asObservable(); // and this one will observe it (isLoadingSubject)
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  isLoading$ = this.isLoadingSubject.asObservable();
+
+  private isDataSavedSubject = new BehaviorSubject<boolean>(false);
+  isDataSeved$ = this.isDataSavedSubject.asObservable();
 
   readonly DataState = DataState; // this is using to access the ENUM data
   readonly EventType = EventType;
@@ -65,11 +68,15 @@ export class ProfileComponent implements OnInit {
    */
   updateProfile(profileForm: NgForm): void {
     this.isLoadingSubject.next(true);
+    // we just clicked and the data is not save yet
+    this.isDataSavedSubject.next(false);
     this.profileState$ = this.userService.update$(profileForm.value).pipe(
       map((response) => {
         console.log(response);
         this.dataSubject.next({ ...response, data: response.data });
         this.isLoadingSubject.next(false);
+        // data is saved
+        this.isDataSavedSubject.next(true);
         return {
           dataState: DataState.LOADED,
           appData: this.dataSubject.value ?? undefined,
@@ -81,6 +88,7 @@ export class ProfileComponent implements OnInit {
       }),
       catchError((error: string) => {
         this.isLoadingSubject.next(false);
+        this.isDataSavedSubject.next(false);
         return of({
           dataState: DataState.LOADED,
           appData: this.dataSubject.value ?? undefined,

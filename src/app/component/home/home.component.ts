@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
   }
 
   downlaodReport(): void {
-    (this.homeState$ = this.customerService.downloadReport$().pipe(
+    this.homeState$ = this.customerService.downloadReport$().pipe(
       map((response) => {
         console.log(response);
         this.reportProgress(response);
@@ -110,8 +110,7 @@ export class HomeComponent implements OnInit {
           dataState: DataState.LOADED,
           appData: this.dataSubject.value ?? undefined,
         };
-      })
-    )),
+      }),
       startWith({
         dataState: DataState.LOADED,
         appData: this.dataSubject.value ?? undefined,
@@ -122,7 +121,8 @@ export class HomeComponent implements OnInit {
           appData: this.dataSubject.value ?? undefined,
           error,
         });
-      });
+      })
+    );
   }
 
   private reportProgress(httpEvent: HttpEvent<string[] | Blob>): void {

@@ -15,12 +15,9 @@ import {
 } from '../../interfaces/appstates';
 import { User } from '../../interfaces/user';
 import { DataState } from '../../enum/datastate.enum';
-import { ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { response } from 'express';
 import { Location } from '@angular/common';
-import { error } from 'console';
-import { register } from 'module';
 import { NgForm } from '@angular/forms';
 
 @Component({
