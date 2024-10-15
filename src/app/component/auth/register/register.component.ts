@@ -1,21 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { RegisterState } from '../../interfaces/appstates';
-import {
-  BehaviorSubject,
-  catchError,
-  map,
-  Observable,
-  of,
-  startWith,
-} from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { RegisterState } from '../../../interfaces/appstates';
+import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { DataState } from '../../enum/datastate.enum';
-import { UserService } from '../../services/user.service';
+import { DataState } from '../../../enum/datastate.enum';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   // initialise the loginState to LOADED

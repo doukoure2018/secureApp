@@ -1,5 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { State } from '../../interfaces/state';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { State } from '../../../interfaces/state';
 import { NgForm } from '@angular/forms';
 import {
   Observable,
@@ -10,22 +15,21 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { DataState } from '../../enum/datastate.enum';
-import { CustomerState, CustomHttpResponse } from '../../interfaces/appstates';
-import { CustomerService } from '../../services/customer.service';
-import { UserService } from '../../services/user.service';
+import { DataState } from '../../../enum/datastate.enum';
+import {
+  CustomerState,
+  CustomHttpResponse,
+} from '../../../interfaces/appstates';
+import { CustomerService } from '../../../services/customer.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { response } from 'express';
-import { error } from 'console';
-import { NgFor } from '@angular/common';
-import { get } from 'http';
 
 @Component({
   selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrl: './customer.component.scss',
+  templateUrl: './customer-detail.component.html',
+  styleUrl: './customer-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomerComponent implements OnInit {
+export class CustomerDetailComponent implements OnInit {
   customerState$: Observable<State<CustomHttpResponse<CustomerState>>> =
     new Observable();
   private dataSubject =

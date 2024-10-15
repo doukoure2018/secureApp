@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
@@ -7,18 +7,21 @@ import {
   of,
   startWith,
 } from 'rxjs';
-import { State } from '../../interfaces/state';
-import { CustomHttpResponse, Page } from '../../interfaces/appstates';
-import { DataState } from '../../enum/datastate.enum';
-import { CustomerService } from '../../services/customer.service';
-import { Customer } from '../../interfaces/customer';
+
 import { Router } from '@angular/router';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { saveAs } from 'file-saver';
+import { Customer } from '../../../interfaces/customer';
+import { State } from '../../../interfaces/state';
+import { CustomHttpResponse } from '../../../interfaces/appstates';
+import { DataState } from '../../../enum/datastate.enum';
+import { CustomerService } from '../../../services/customer.service';
+import { NotificationService } from '../../../services/notification.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   homeState$: Observable<State<CustomHttpResponse<any>>> = new Observable();
@@ -41,12 +44,14 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.homeState$ = this.customerService.customers$().pipe(
       map((response) => {
+        this.notificationService.onSuccess(response.message);
         console.log(response);
         this.dataSubject.next(response);
         return {

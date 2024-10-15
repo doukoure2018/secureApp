@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
@@ -8,15 +8,11 @@ import {
   startWith,
   switchMap,
 } from 'rxjs';
-import {
-  accountType,
-  CustomHttpResponse,
-  verifyState,
-} from '../../interfaces/appstates';
-import { User } from '../../interfaces/user';
-import { DataState } from '../../enum/datastate.enum';
+import { accountType, verifyState } from '../../../interfaces/appstates';
+import { User } from '../../../interfaces/user';
+import { DataState } from '../../../enum/datastate.enum';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../../services/user.service';
 import { Location } from '@angular/common';
 import { NgForm } from '@angular/forms';
 
@@ -24,6 +20,7 @@ import { NgForm } from '@angular/forms';
   selector: 'app-verify',
   templateUrl: './verify.component.html',
   styleUrl: './verify.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyComponent implements OnInit {
   verifyState$: Observable<verifyState> = new Observable();

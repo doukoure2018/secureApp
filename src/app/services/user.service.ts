@@ -1,8 +1,4 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import {
@@ -15,9 +11,7 @@ import { User } from '../interfaces/user';
 import { Key } from '../enum/key.enum';
 import { NewPasswordForm } from '../interfaces/newPasswordForm';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserService {
   private readonly server: string = 'http://localhost:8080/auth/secureapi';
   private jwtHelper = new JwtHelperService();

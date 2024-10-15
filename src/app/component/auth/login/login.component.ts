@@ -1,4 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
@@ -7,17 +12,19 @@ import {
   of,
   startWith,
 } from 'rxjs';
-import { DataState } from '../../enum/datastate.enum';
-import { LoginState } from '../../interfaces/appstates';
-import { UserService } from '../../services/user.service';
+import { DataState } from '../../../enum/datastate.enum';
+import { LoginState } from '../../../interfaces/appstates';
+import { UserService } from '../../../services/user.service';
 import { NgForm } from '@angular/forms';
-import { Key } from '../../enum/key.enum';
+import { Key } from '../../../enum/key.enum';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   // initialise the loginState to LOADED
@@ -26,15 +33,13 @@ export class LoginComponent implements OnInit {
   private emailSubject = new BehaviorSubject<string>('');
   readonly DataState = DataState;
 
-  // Injection de dependance
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
-    // if (this.loginState$) {
-    //   this.loginState$.subscribe((loginState) => {
-    //     console.log('log State: ', loginState);
-    //   });
-    // }
     this.userService.isAuthenticated()
       ? this.router.navigate(['/'])
       : this.router.navigate(['/login']);
@@ -50,8 +55,8 @@ export class LoginComponent implements OnInit {
       .login$(loginForm.value.email, loginForm.value.password)
       .pipe(
         map((response) => {
-          // if user is loged with Mfa
           if (response.data?.user?.usingMfa) {
+            this.notificationService.onDefault(response.message);
             this.phoneSubject.next(response.data?.user?.phone ?? '');
             this.emailSubject.next(response.data?.user?.email ?? '');
             console.log(
@@ -68,6 +73,7 @@ export class LoginComponent implements OnInit {
               ),
             };
           } else {
+            this.notificationService.onDefault(response.message);
             const access_token = response.data?.access_token ?? '';
             const refresh_token = response.data?.refresh_token ?? '';
             localStorage.setItem(Key.TOKEN, access_token);
@@ -81,6 +87,7 @@ export class LoginComponent implements OnInit {
         }),
         startWith({ dataState: DataState.LOADING, isUsingMfa: false }),
         catchError((error: string) => {
+          this.notificationService.onDefault(error);
           return of({
             dataState: DataState.ERROR,
             isUsingMfa: false,

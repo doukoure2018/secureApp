@@ -1,26 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { State } from '../../interfaces/state';
-import { NgForm } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { State } from '../../../interfaces/state';
+import { CustomHttpResponse, Profile } from '../../../interfaces/appstates';
 import {
-  Observable,
   BehaviorSubject,
-  map,
-  startWith,
   catchError,
+  map,
+  Observable,
   of,
+  startWith,
 } from 'rxjs';
-import { DataState } from '../../enum/datastate.enum';
-import { CustomHttpResponse } from '../../interfaces/appstates';
-import { CustomerService } from '../../services/customer.service';
-import { Router } from '@angular/router';
+import { DataState } from '../../../enum/datastate.enum';
+import { CustomerService } from '../../../services/customer.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-newinvoice',
-  templateUrl: './newinvoice.component.html',
-  styleUrl: './newinvoice.component.scss',
+  selector: 'app-newcustomer',
+  templateUrl: './newcustomer.component.html',
+  styleUrl: './newcustomer.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewinvoiceComponent implements OnInit {
-  newInvoiceState$: Observable<State<CustomHttpResponse<any>>> =
+export class NewcustomerComponent implements OnInit {
+  newCustomerState$: Observable<State<CustomHttpResponse<any>>> =
     new Observable();
   private dataSubject = new BehaviorSubject<CustomHttpResponse<any> | null>(
     null
@@ -30,13 +30,10 @@ export class NewinvoiceComponent implements OnInit {
 
   readonly DataState = DataState;
 
-  constructor(
-    private customerService: CustomerService,
-    private router: Router
-  ) {}
+  constructor(private customerService: CustomerService) {}
 
   ngOnInit(): void {
-    this.newInvoiceState$ = this.customerService.newInvoices$().pipe(
+    this.newCustomerState$ = this.customerService.customers$().pipe(
       map((response) => {
         console.log(response);
         this.dataSubject.next(response);
@@ -56,17 +53,20 @@ export class NewinvoiceComponent implements OnInit {
     );
   }
 
-  createInvoice(invoiceForm: NgForm): void {
+  /**
+   * add new Customer
+   * @param newCustomerForm
+   */
+  createCustomer(newCustomerForm: NgForm): void {
     this.isLoadingSubject.next(true);
-    this.newInvoiceState$ = this.customerService
-      .createInvoice$(invoiceForm.value)
+    this.newCustomerState$ = this.customerService
+      .newCustomers$(newCustomerForm.value)
       .pipe(
         map((response) => {
           console.log(response);
           // set the initial value
-          //this.dataSubject.next(response);
+          newCustomerForm.reset({ type: 'INDIVIDUAL', status: 'ACTIVE' });
           this.isLoadingSubject.next(false);
-          this.router.navigate([`/invoices`]);
           return {
             dataState: DataState.LOADED,
             appData: this.dataSubject.value ?? undefined,

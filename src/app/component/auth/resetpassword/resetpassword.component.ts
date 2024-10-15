@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { RegisterState } from '../../interfaces/appstates';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RegisterState } from '../../../interfaces/appstates';
 import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { DataState } from '../../enum/datastate.enum';
-import { UserService } from '../../services/user.service';
+import { DataState } from '../../../enum/datastate.enum';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-resetpassword',
   templateUrl: './resetpassword.component.html',
   styleUrl: './resetpassword.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetpasswordComponent {
   resetPasswordState$: Observable<RegisterState> = of({

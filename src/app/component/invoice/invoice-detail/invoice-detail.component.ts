@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { State } from '../../interfaces/state';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { State } from '../../../interfaces/state';
 import {
   Observable,
   BehaviorSubject,
@@ -9,17 +9,21 @@ import {
   catchError,
   of,
 } from 'rxjs';
-import { DataState } from '../../enum/datastate.enum';
-import { CustomHttpResponse, InvoiceState } from '../../interfaces/appstates';
-import { CustomerService } from '../../services/customer.service';
+import { DataState } from '../../../enum/datastate.enum';
+import {
+  CustomHttpResponse,
+  InvoiceState,
+} from '../../../interfaces/appstates';
+import { CustomerService } from '../../../services/customer.service';
 
 import { jsPDF as pdf } from 'jspdf';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-invoice',
-  templateUrl: './invoice.component.html',
-  styleUrl: './invoice.component.scss',
+  templateUrl: './invoice-detail.component.html',
+  styleUrl: './invoice-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoiceComponent implements OnInit {
   invoiceState$: Observable<State<CustomHttpResponse<InvoiceState>>> =

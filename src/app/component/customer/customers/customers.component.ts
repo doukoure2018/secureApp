@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
@@ -7,17 +7,18 @@ import {
   of,
   startWith,
 } from 'rxjs';
-import { DataState } from '../../enum/datastate.enum';
-import { CustomHttpResponse } from '../../interfaces/appstates';
-import { CustomerService } from '../../services/customer.service';
-import { UserService } from '../../services/user.service';
-import { State } from '../../interfaces/state';
+import { DataState } from '../../../enum/datastate.enum';
+import { CustomHttpResponse } from '../../../interfaces/appstates';
+import { CustomerService } from '../../../services/customer.service';
+import { UserService } from '../../../services/user.service';
+import { State } from '../../../interfaces/state';
 import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomersComponent implements OnInit {
   customersState$: Observable<State<CustomHttpResponse<any>>> =

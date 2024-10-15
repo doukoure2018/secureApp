@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { State } from '../../interfaces/state';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { State } from '../../../interfaces/state';
 import { NgForm } from '@angular/forms';
 import {
   Observable,
@@ -9,15 +9,16 @@ import {
   catchError,
   of,
 } from 'rxjs';
-import { DataState } from '../../enum/datastate.enum';
-import { CustomHttpResponse } from '../../interfaces/appstates';
-import { CustomerService } from '../../services/customer.service';
-import { UserService } from '../../services/user.service';
+import { DataState } from '../../../enum/datastate.enum';
+import { CustomHttpResponse } from '../../../interfaces/appstates';
+import { CustomerService } from '../../../services/customer.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoicesComponent implements OnInit {
   invoicesState$: Observable<State<CustomHttpResponse<any>>> = new Observable();

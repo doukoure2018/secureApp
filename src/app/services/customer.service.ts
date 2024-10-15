@@ -12,9 +12,7 @@ import { Customer } from '../interfaces/customer';
 import { Stats } from '../interfaces/stats';
 import { Invoice } from '../interfaces/invoice';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CustomerService {
   private readonly server: string = 'http://localhost:8080/secureapi/customer';
 
